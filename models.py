@@ -59,6 +59,7 @@ class BaselineDNN(nn.Module):
 
         # 2 - construct a sentence representation out of the word embeddings
         representations = torch.sum(embeddings, dim = 1)
+        lengths = lengths.view(-1,1) # so that can be broadcasted in division
         representations = torch.div(representations, lengths) # EX6
 
         # 3 - transform the representations to new ones.
