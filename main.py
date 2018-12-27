@@ -54,9 +54,11 @@ else:
     raise ValueError("Invalid dataset")
 
 # convert data labels from strings to integers
-y_train = ...  # EX1
-y_test = ...  # EX1
-n_classes = ...  # EX1 - LabelEncoder.classes_.size
+lab_enc = LabelEncoder()
+lab_enc.fit(y_train)
+y_train = lab_enc.transform(y_train)  # EX1
+y_test = lab_enc.transform(y_test)  # EX1
+n_classes = lab_enc.classes_.size  # EX1 - LabelEncoder.classes_.size
 
 # Define our PyTorch-based Dataset
 train_set = SentenceDataset(X_train, y_train, word2idx)
