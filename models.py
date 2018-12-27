@@ -33,13 +33,17 @@ class BaselineDNN(nn.Module):
 
         # 3 - define if the embedding layer will be frozen or finetuned
         ...  # EX4
+        self.embedding = nn.Embedding.from_pretrained(embeddings, freeze = not trainable_emb)
+        
+        # input dimension
+        _, n_input = embeddings.shape
 
         # 4 - define a non-linear transformation of the representations
-        ...  # EX5
+        self.hidden = nn.LeakyReLU()  # EX5
 
         # 5 - define the final Linear layer which maps
         # the representations to the classes
-        ...  # EX5
+        self.out == nn.Linear(n_input, output_size) # EX5
 
     def forward(self, x, lengths):
         """
@@ -51,15 +55,16 @@ class BaselineDNN(nn.Module):
         """
 
         # 1 - embed the words, using the embedding layer
-        embeddings = ...  # EX6
+        embeddings = self.embedding(x)  # EX6
 
         # 2 - construct a sentence representation out of the word embeddings
-        representations = ...  # EX6
+        representations = torch.sum(embeddings, dim = 1)
+        representations = torch.div(representations, lengths) # EX6
 
         # 3 - transform the representations to new ones.
-        representations = ...  # EX6
+        representations = self.hidden(representations)  # EX6
 
         # 4 - project the representations to classes using a linear layer
-        logits = ...  # EX6
+        logits = self.out(representations) # EX6
 
         return logits
