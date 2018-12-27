@@ -42,7 +42,8 @@ class SentenceDataset(Dataset):
         self.data_len = list(map(lambda x: len(x), self.data))
         
         # iterable of words to iterable of idx's.
-        word2id = lambda x: list(map(lambda y: self.word2idx.get(y, "<unk>"), x))
+        oov_value = self.word2idx.get("<unk>")
+        word2id = lambda x: list(map(lambda y: self.word2idx.get(y, oov_value), x))
         
         # transform our data.
         self.data = list(map(lambda x: word2id(x), self.data))
