@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 # for example http://nlp.stanford.edu/data/glove.6B.zip
 
 # 1 - point to the pretrained embeddings file (must be in /embeddings folder)
-EMBEDDINGS = os.path.join(EMB_PATH, "glove.6B.50d.txt")
+EMBEDDINGS = os.path.join(EMB_PATH, "glove.twitter.27B.50d.txt")
 
 # 2 - set the correct dimensionality of the embeddings
 EMB_DIM = 50
@@ -32,7 +32,7 @@ EMB_DIM = 50
 EMB_TRAINABLE = False
 BATCH_SIZE = 128
 EPOCHS = 50
-DATASET = "MR"  # options: "MR", "Semeval2017A"
+DATASET = "Semeval2017A"  # options: "MR", "Semeval2017A"
 
 # if your computer has a CUDA compatible gpu use it, otherwise use the cpu
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -65,13 +65,13 @@ train_set = SentenceDataset(X_train, y_train, word2idx)
 test_set = SentenceDataset(X_test, y_test, word2idx)
 
 # EX4 - Define our PyTorch-based DataLoader
-train_loader = ...  # EX7
-test_loader = ...  # EX7
+train_loader = DataLoader(train_set, batch_size=BATCH_SIZE)  # EX7
+test_loader = DataLoader(test_set, batch_size=BATCH_SIZE)   # EX7
 
 #############################################################################
 # Model Definition (Model, Loss Function, Optimizer)
 #############################################################################
-model = BaselineDNN(output_size=...,  # EX8
+model = BaselineDNN(output_size=n_classes,  # EX8
                     embeddings=embeddings,
                     trainable_emb=EMB_TRAINABLE)
 
@@ -80,9 +80,13 @@ model.to(DEVICE)
 print(model)
 
 # We optimize ONLY those parameters that are trainable (p.requires_grad==True)
-criterion = ...  # EX8
-parameters = ...  # EX8
-optimizer = ...  # EX8
+if n_classes == 2:
+    criterion = torch.nn.BCEWithLogitsLoss()  # EX8
+else:
+    criterion = torch.nn.CrossEntropyLoss()
+    
+parameters = list(filter(lambda p: p.requires_grad, model.parameters())) # EX8
+optimizer = torch.optim.Adam(parameters)  # EX8
 
 #############################################################################
 # Training Pipeline
