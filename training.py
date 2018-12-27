@@ -36,7 +36,8 @@ def train_dataset(_epoch, dataloader, model, loss_function, optimizer):
     for index, batch in enumerate(dataloader, 1):
         # get the inputs (batch)
         inputs, labels, lengths = batch
-
+        inputs = torch.stack(inputs)
+        
         # move the batch tensors to the right device
         inputs = inputs.to(device)
         labels = labels.to(device)
@@ -89,6 +90,7 @@ def eval_dataset(dataloader, model, loss_function):
         for index, batch in enumerate(dataloader, 1):
             # get the inputs (batch)
             inputs, labels, lengths = batch
+            inputs = torch.stack(inputs)
 
             # Step 1 - move the batch tensors to the right device
             inputs = inputs.to(device)
