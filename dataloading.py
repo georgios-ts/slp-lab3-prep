@@ -39,7 +39,7 @@ class SentenceDataset(Dataset):
         self.word2idx = word2idx
         
         # save the "real" length of the sentences.
-        self.data_len = list(map(lambda x: len(x), self.data))
+        data_len = list(map(lambda x: len(x), self.data))
         
         # iterable of words to iterable of idx's.
         word2id = lambda x: list(map(lambda y: self.word2idx.get(y, "<unk>"), x))
@@ -48,13 +48,13 @@ class SentenceDataset(Dataset):
         self.data = list(map(lambda x: word2id(x), self.data))
         
         # all examples must have the same length.
-        self.max_length = 35
+        max_length = 35
         
         for i, sent in enumerate(self.data):
-            if len(sent) < self.max_length:
-                self.data[i] += [0] * (self.max_length - len(sent))
+            if len(sent) < max_length:
+                self.data[i] += [0] * (max_length - len(sent))
             else:
-                self.data[i] = sent[:self.max_length]
+                self.data[i] = sent[:max_length]
                 
         # self.data = X
         # self.labels = y
@@ -102,7 +102,7 @@ class SentenceDataset(Dataset):
 
         # EX3
         
-        return self.data[index], self.labels[index], self.data_len[index]
+        return self.data[index], self.labels[index], data_len[index]
     
         # return example, label, length
         # raise NotImplementedError
