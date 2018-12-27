@@ -43,7 +43,7 @@ class BaselineDNN(nn.Module):
 
         # 5 - define the final Linear layer which maps
         # the representations to the classes
-        self.out == nn.Linear(n_input, output_size) # EX5
+        self.out = nn.Linear(n_input, output_size) # EX5
 
     def forward(self, x, lengths):
         """
@@ -58,9 +58,9 @@ class BaselineDNN(nn.Module):
         embeddings = self.embedding(x)  # EX6
 
         # 2 - construct a sentence representation out of the word embeddings
+        lengths = lengths.view(-1,1)      # so that can be broadcasted in division
+        lengths = lengths.type(torch.FloatTensor)   # from LongTensor to FloatTensor
         representations = torch.sum(embeddings, dim = 1)
-        lengths = lengths.view(-1,1) # so that can be broadcasted in division
-        lengths = lengths.type(torch.FloatTensor) # from LongTensor to FloatTensor
         representations = torch.div(representations, lengths) # EX6
 
         # 3 - transform the representations to new ones.
