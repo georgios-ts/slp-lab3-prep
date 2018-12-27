@@ -61,7 +61,7 @@ class SentenceDataset(Dataset):
         # self.word2idx = word2idx
 
         # EX2
-        raise NotImplementedError
+        # raise NotImplementedError
 
     def __len__(self):
         """
@@ -105,5 +105,5 @@ class SentenceDataset(Dataset):
         return self.data[index], self.labels[index], self.data_len[index]
     
         # return example, label, length
-        raise NotImplementedError
+        # raise NotImplementedError
 
