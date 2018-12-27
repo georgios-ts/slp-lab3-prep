@@ -37,6 +37,7 @@ def train_dataset(_epoch, dataloader, model, loss_function, optimizer):
         # get the inputs (batch)
         inputs, labels, lengths = batch
         inputs = torch.stack(inputs)
+        inputs = torch.t(inputs)
         
         # move the batch tensors to the right device
         inputs = inputs.to(device)
@@ -91,6 +92,7 @@ def eval_dataset(dataloader, model, loss_function):
             # get the inputs (batch)
             inputs, labels, lengths = batch
             inputs = torch.stack(inputs)
+            inputs = torch.t(inputs)
 
             # Step 1 - move the batch tensors to the right device
             inputs = inputs.to(device)
@@ -98,7 +100,7 @@ def eval_dataset(dataloader, model, loss_function):
             lengths = lengths.to(device) # EX9
 
             # Step 2 - forward pass: y' = model(x)
-            out = model(inputs, length)  # EX9
+            out = model(inputs, lengths)  # EX9
 
             # Step 3 - compute loss.
             # We compute the loss only for inspection (compare train/test loss)
