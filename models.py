@@ -37,13 +37,16 @@ class BaselineDNN(nn.Module):
         
         # input dimension
         _, n_input = embeddings.shape
+        n_hidden = 32
 
         # 4 - define a non-linear transformation of the representations
-        self.hidden = nn.LeakyReLU()  # EX5
+        self.hidden1 = nn.Tanh()  # EX5
+        self.hidden2 = nn.Linear(n_input, n_hidden)
+        self.hidden2_act = nn.LeakyReLU()
 
         # 5 - define the final Linear layer which maps
         # the representations to the classes
-        self.out = nn.Linear(n_input, output_size) # EX5
+        self.out = nn.Linear(n_hidden, output_size) # EX5
 
     def forward(self, x, lengths):
         """
@@ -64,7 +67,9 @@ class BaselineDNN(nn.Module):
         representations = torch.div(representations, lengths) # EX6
 
         # 3 - transform the representations to new ones.
-        representations = self.hidden(representations)  # EX6
+        representations = self.hidden(representations) 
+        representations = self.hidden2(representations) 
+        representations = self.hidden2_act(representations) # EX6
 
         # 4 - project the representations to classes using a linear layer
         logits = self.out(representations) # EX6
